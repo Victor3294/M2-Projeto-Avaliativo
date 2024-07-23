@@ -1,0 +1,7 @@
+PORT_API=Sua-porta-do-api
+DB_PORT=Sua-porta-do-banco-de-dados
+DB_HOST=Seu-host-do-banco-de-dados
+DB_USER=Seu-usuario-do-banco-de-dados
+DB_PASSWORD=Sua-senha-do-banco-de-dados
+DB_DIALECT=Sua-IDE-do-banco-de-dados
+DB_NAME=Nome-da-sua-database

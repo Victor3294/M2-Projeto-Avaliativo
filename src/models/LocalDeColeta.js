@@ -26,6 +26,14 @@ const LocalDeColeta = connection.define('locais_de_coleta', {
       localidade: {
         type: Sequelize.STRING(100)
       },
+      latitude: {
+        allowNull: false,
+        type: Sequelize.STRING(9)
+      },  
+      longitude: {
+        allowNull: false,
+        type: Sequelize.STRING(9)
+      },
       usuario_id: {
         type: Sequelize.INTEGER,
         allowNull: false,

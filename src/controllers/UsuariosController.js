@@ -1,6 +1,8 @@
 const Usuario = require("../models/Usuario")
+const { getEnderecoCep } = require("../services/endereco.service")
 
 const regexEmail = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
+const regexCep = new RegExp(/^\d{5}-\d{3}$/)
 class UsuariosController {
     async criarUsuario (request, response) {
         try {
@@ -21,6 +23,9 @@ class UsuariosController {
             if(regexEmail.test(dados.email) === false) {
                 return response.status(400).json({mensagem: "O formato do email enviado é invalido! Use um formato valido!"})
             }
+            if(regexCep.test(dados.cep) === false){
+                return response.status(400).json({mensagem: "O formato do cep enviado é invalido! Use o formato #####-###"})
+            }
             const cpfExistente = await Usuario.findOne({
                 where: {
                     cpf : dados.cpf
@@ -36,9 +41,19 @@ class UsuariosController {
                     return response.status(409).json({mensagem: "CPF ou email invalido"})
                 }
             }
+
+            const endereco = await getEnderecoCep(dados.cep)
+
+            if(endereco.erro === true){
+                return response.status(400).json({mensagem: "CEP não encontrado ou inexistente"})
+            }
+
             const usuario = {
                 ...dados,
+                ...endereco
             }
+
+            console.log(usuario)
             
             
             response.status(200).json({mensagem: "Deu certo!"})

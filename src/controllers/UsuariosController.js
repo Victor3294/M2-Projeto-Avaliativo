@@ -1,3 +1,4 @@
+const { compareSync } = require("bcryptjs")
 const Usuario = require("../models/Usuario")
 const { getEnderecoCep } = require("../services/endereco.service")
 
@@ -64,6 +65,30 @@ class UsuariosController {
         } catch (error) {
             console.log(error)
             response.status(500).json({mensagem: "Não foi possivel cadastrar o usuário"})
+        }
+    }
+
+    async fazerLogin(request, response) {
+        try {
+            const dados = request.body
+            if(!dados.email || !dados.password_hash) {
+                return response.status(400).json({mensagem: "A senha e o email ou o cpf são obrigatorios para fazer o login!"})
+            }
+            const usuario = await Usuario.findOne({
+                where: {
+                    email: dados.email
+                }
+            })
+            if(!usuario){
+                return response.status(401).json({mensagem: "Email ou senha incorretos"})
+            }
+            const senhaCorreta = compareSync(dados.password_hash, usuario.password_hash)
+            if(!senhaCorreta){
+                return response.status(401).json({mensagem: "Email ou senha incorretos"})
+            }
+            response.status(200).json({mensagem: "AEEEEEEEEEEEEEEEEEEEE"})
+        } catch (error) {
+            response.status(500).json({mensagem: "Não foi possivel realizar o login"})
         }
     }
 }

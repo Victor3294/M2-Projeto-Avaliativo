@@ -48,15 +48,19 @@ class UsuariosController {
                 return response.status(400).json({mensagem: "CEP não encontrado ou inexistente"})
             }
 
-            const usuario = {
+            const dadosComEndereco = {
                 ...dados,
                 ...endereco
             }
 
-            console.log(usuario)
+            const usuarioCriado = await Usuario.create(dadosComEndereco)
+            response.status(201).json({
+                nome: usuarioCriado.nome,
+                sexo: usuarioCriado.sexo,
+                createdAt: usuarioCriado.createdAt,
+                updatedAt: usuarioCriado.updatedAt
+            })
             
-            
-            response.status(200).json({mensagem: "Deu certo!"})
         } catch (error) {
             console.log(error)
             response.status(500).json({mensagem: "Não foi possivel cadastrar o usuário"})

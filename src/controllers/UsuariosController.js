@@ -1,6 +1,7 @@
 const { compareSync } = require("bcryptjs")
 const Usuario = require("../models/Usuario")
 const { getEnderecoCep } = require("../services/endereco.service")
+const { sign } = require("jsonwebtoken")
 
 const regexEmail = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
 const regexCep = new RegExp(/^\d{5}-\d{3}$/)
@@ -86,7 +87,15 @@ class UsuariosController {
             if(!senhaCorreta){
                 return response.status(401).json({mensagem: "Email ou senha incorretos"})
             }
-            response.status(200).json({mensagem: "AEEEEEEEEEEEEEEEEEEEE"})
+            const token = sign({
+                id: usuario.id
+            }, process.env.SECRET_JWT, {
+                expiresIn: "1d"
+            })
+            response.status(200).json({
+                token: token,
+                nome: usuario.nome
+            })
         } catch (error) {
             response.status(500).json({mensagem: "Não foi possivel realizar o login"})
         }

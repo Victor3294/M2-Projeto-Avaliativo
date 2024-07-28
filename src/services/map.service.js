@@ -22,4 +22,18 @@ async function getMapaLocal(cep) {
     }
 }
 
-module.exports = {getMapaLocal}
+async function getGoogleMapsLink(local) {
+    try {
+
+        const {lat, lon} = local
+        const googleMapsLink =  `https://www.google.com/maps?q=${lat},${lon}`
+        return googleMapsLink
+
+    } catch (error) {
+        return {
+            erro: "Erro ao gerar o link do google maps"
+        }
+    }
+}
+
+module.exports = {getMapaLocal , getGoogleMapsLink}

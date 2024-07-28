@@ -24,14 +24,32 @@ class LocaisDeColetaController {
             const dadosLocalDeColeta = {
                 ...dados,
                 ...endereco,
-                ...coordenadas,
-                usuario_id : request.usuarioId
+                ...coordenadas, 
             }
-            const localDeColeta = await LocalDeColeta.create(dadosLocalDeColeta)
-            response.status(201).json(localDeColeta)
+            const localDeColeta = await LocalDeColeta.create({
+                ...dadosLocalDeColeta,
+                usuario_id : request.usuarioId
+            })
+            response.status(201).json(dadosLocalDeColeta)
         } catch (error) {
             console.log(error)
             response.status(500).json({mensagem: "Não foi possivel cadastrar o local de coleta"})
+        }
+    }
+
+    async listarLocaisDeColeta (request, response) {
+        try {
+            const locaisDeColeta = await LocalDeColeta.findAll({
+                where: {
+                    usuario_id: request.usuarioId
+                }
+            })
+            if(locaisDeColeta.length === 0) {
+                return response.status(200).json({mensagem: "O usuario autenticado não possui nenhum local de coleta cadastrado ainda !"})
+            }
+            response.status(200).json(locaisDeColeta)
+        } catch (error) {
+            response.status(500).json({mensagem: "Não foi possivel realizar a busca"})
         }
     }
 }

@@ -4,5 +4,6 @@ const LocaisDeColetaController = require("../controllers/LocaisDeColetaControlle
 const locaisDeColetaRoutes = new Router()
 
 locaisDeColetaRoutes.post('/', LocaisDeColetaController.criarLocalDeColeta)
+locaisDeColetaRoutes.get('/', LocaisDeColetaController.listarLocaisDeColeta)
 
 module.exports = locaisDeColetaRoutes

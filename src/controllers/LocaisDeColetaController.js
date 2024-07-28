@@ -1,0 +1,39 @@
+const LocalDeColeta = require("../models/LocalDeColeta")
+const { getEnderecoCep } = require("../services/endereco.service")
+const { getMapaLocal } = require("../services/map.service")
+
+const regexCep = new RegExp(/^\d{5}-\d{3}$/)
+class LocaisDeColetaController {
+    async criarLocalDeColeta (request, response) {
+        try {
+            const dados = request.body
+            if(!dados.nome_do_local || !dados.descricao || !dados.cep) {
+                return response.status(400).json({mensagem: "O nome, a descrição e o cep são dados obrigatórios"})
+            }
+            if(regexCep.test(dados.cep) === false) {
+                return response.status(400).json({mensagem: "O formato do cep enviado é invalido! Use o formato #####-###"})
+            }
+            const endereco = await getEnderecoCep(dados.cep)
+            if(endereco.erro){
+                return response.status(400).json({mensagem: endereco.erro})
+            }
+            const coordenadas = await getMapaLocal(dados.cep)
+            if(coordenadas.erro){
+                return response.status(400).json({mensagem: coordenadas.erro})
+            }
+            const dadosLocalDeColeta = {
+                ...dados,
+                ...endereco,
+                ...coordenadas,
+                usuario_id : request.usuarioId
+            }
+            const localDeColeta = await LocalDeColeta.create(dadosLocalDeColeta)
+            response.status(201).json(localDeColeta)
+        } catch (error) {
+            console.log(error)
+            response.status(500).json({mensagem: "Não foi possivel cadastrar o local de coleta"})
+        }
+    }
+}
+
+module.exports = new LocaisDeColetaController()

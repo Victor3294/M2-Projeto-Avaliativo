@@ -46,8 +46,8 @@ class UsuariosController {
 
             const endereco = await getEnderecoCep(dados.cep)
 
-            if(endereco.erro === true){
-                return response.status(400).json({mensagem: "CEP não encontrado ou inexistente"})
+            if(endereco.erro){
+                return response.status(400).json({mensagem: endereco.erro})
             }
 
             const dadosComEndereco = {

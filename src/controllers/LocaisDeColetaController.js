@@ -69,6 +69,23 @@ class LocaisDeColetaController {
             response.status(500).json({mensagem: "Não foi possivel realizar a busca"})
         }
     }
+
+    async deletarUmLocalColeta (request, response) {
+        try {
+            const id = request.params.id
+            const localDeColeta = await LocalDeColeta.findByPk(id)
+            if(!localDeColeta){
+                return response.status(404).json({mensagem: "Não foi encontrado um local de coleta com esse id"})
+            }
+            if(localDeColeta.usuario_id != request.usuarioId){
+                return response.status(403).json({mensagem: "Não foi usuario autenticado que cadastrou esse item, então ele não tem permissão para deletar esse local de coleta"})
+            }
+            await localDeColeta.destroy()
+            response.status(204).json()
+        } catch (error) {
+            response.status(500).json({mensagem: "Não foi possivel deletar o local de coleta"})
+        }
+    }
 }
 
 module.exports = new LocaisDeColetaController()

@@ -9,9 +9,6 @@ const LocalDeColeta = connection.define('locais_de_coleta', {
       descricao: {
         type: DataTypes.TEXT
       },
-      sexo: {
-        type: DataTypes.ENUM('Masculino', 'Feminino', 'Outro')
-      },
       cep: {
         type: DataTypes.STRING(9)
       },
@@ -29,11 +26,11 @@ const LocalDeColeta = connection.define('locais_de_coleta', {
       },
       latitude: {
         allowNull: false,
-        type: DataTypes.STRING(9)
+        type: DataTypes.STRING(15)
       },  
       longitude: {
         allowNull: false,
-        type: DataTypes.STRING(9)
+        type: DataTypes.STRING(15)
       },
       usuario_id: {
         type: DataTypes.INTEGER,

@@ -47,7 +47,24 @@ class LocaisDeColetaController {
             if(locaisDeColeta.length === 0) {
                 return response.status(200).json({mensagem: "O usuario autenticado não possui nenhum local de coleta cadastrado ainda !"})
             }
+            
             response.status(200).json(locaisDeColeta)
+        } catch (error) {
+            response.status(500).json({mensagem: "Não foi possivel realizar a busca"})
+        }
+    }
+
+    async listarUmLocalDeColeta (request, response) {
+        try {
+            const id = request.params.id
+            const localDeColeta = await LocalDeColeta.findByPk(id)
+            if(!localDeColeta){
+                return response.status(404).json({mensagem: "Não foi encontrado um local de coleta com esse id"})
+            }
+            if(localDeColeta.usuario_id != request.usuarioId){
+                return response.status(403).json({mensagem: "Não foi usuario autenticado que cadastrou esse item, então ele não tem permissão para ver suas informações"})
+            }
+            response.status(200).json(localDeColeta)
         } catch (error) {
             response.status(500).json({mensagem: "Não foi possivel realizar a busca"})
         }

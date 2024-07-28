@@ -5,5 +5,6 @@ const locaisDeColetaRoutes = new Router()
 
 locaisDeColetaRoutes.post('/', LocaisDeColetaController.criarLocalDeColeta)
 locaisDeColetaRoutes.get('/', LocaisDeColetaController.listarLocaisDeColeta)
+locaisDeColetaRoutes.get('/:id', LocaisDeColetaController.listarUmLocalDeColeta)
 
 module.exports = locaisDeColetaRoutes

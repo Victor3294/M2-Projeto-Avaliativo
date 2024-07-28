@@ -26,11 +26,11 @@ const LocalDeColeta = connection.define('locais_de_coleta', {
       },
       latitude: {
         allowNull: false,
-        type: DataTypes.STRING(15)
+        type: DataTypes.STRING(30)
       },  
       longitude: {
         allowNull: false,
-        type: DataTypes.STRING(15)
+        type: DataTypes.STRING(30)
       },
       usuario_id: {
         type: DataTypes.INTEGER,

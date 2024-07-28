@@ -24,11 +24,11 @@ module.exports = {
       },
       latitude: {
         allowNull: false,
-        type: Sequelize.STRING(15)
+        type: Sequelize.STRING(30)
       },  
       longitude: {
         allowNull: false,
-        type: Sequelize.STRING(15)
+        type: Sequelize.STRING(30)
       },
       logradouro: {
         allowNull: false,

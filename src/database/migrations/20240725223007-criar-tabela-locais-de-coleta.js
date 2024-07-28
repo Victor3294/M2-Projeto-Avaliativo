@@ -18,10 +18,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT
       },
-      sexo: {
-        allowNull: false,
-        type: Sequelize.ENUM('Masculino', 'Feminino', 'Outro')
-      },
       cep: {
         allowNull: false,
         type: Sequelize.STRING(9)

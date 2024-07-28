@@ -8,5 +8,6 @@ locaisDeColetaRoutes.get('/', LocaisDeColetaController.listarLocaisDeColeta)
 locaisDeColetaRoutes.get('/:id', LocaisDeColetaController.listarUmLocalDeColeta)
 locaisDeColetaRoutes.delete('/:id', LocaisDeColetaController.deletarUmLocalColeta)
 locaisDeColetaRoutes.put('/:id', LocaisDeColetaController.atualizarUmLocalDeColeta)
+locaisDeColetaRoutes.get('/:id/maps', LocaisDeColetaController.gerarLinkMapsLocalDeColeta)
 
 module.exports = locaisDeColetaRoutes

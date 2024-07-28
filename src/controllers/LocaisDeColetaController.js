@@ -1,6 +1,6 @@
 const LocalDeColeta = require("../models/LocalDeColeta")
 const { getEnderecoCep } = require("../services/endereco.service")
-const { getMapaLocal } = require("../services/map.service")
+const { getMapaLocal, getGoogleMapsLink } = require("../services/map.service")
 
 const regexCep = new RegExp(/^\d{5}-\d{3}$/)
 class LocaisDeColetaController {
@@ -133,6 +133,30 @@ class LocaisDeColetaController {
         } catch (error) {
             console.log(error)
             response.status(500).json({ mensagem: "Não foi possivel atualizar o local de coleta" })
+        }
+    }
+
+    async gerarLinkMapsLocalDeColeta (request, response) {
+        try {
+            const id = request.params.id
+            const localDeColeta = await LocalDeColeta.findByPk(id)
+            if (!localDeColeta) {
+                return response.status(404).json({ mensagem: "Não foi encontrado um local de coleta com esse id" })
+            }
+            if (localDeColeta.usuario_id != request.usuarioId) {
+                return response.status(403).json({ mensagem: "Não foi usuario autenticado que cadastrou esse item, então ele não tem permissão para gerar um link no maps desse local de coleta" })
+            }
+            const coordenadas = {
+                lat : localDeColeta.latitude,
+                lon : localDeColeta.longitude
+            }
+            const linkMaps = await getGoogleMapsLink(coordenadas)
+            if(!linkMaps){
+                response.status(500).json(linkMaps.erro)
+            }
+            response.status(201).json({link: linkMaps})
+        } catch (error) {
+            response.status(500).json({mensagem: "Não foi possivel gerar o link"})
         }
     }
 }

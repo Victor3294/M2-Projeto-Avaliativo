@@ -5,32 +5,36 @@ const { sign } = require("jsonwebtoken")
 
 const regexEmail = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
 const regexCep = new RegExp(/^\d{5}-\d{3}$/)
+const regexCpf = new RegExp(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/)
 class UsuariosController {
-    async criarUsuario (request, response) {
+    async criarUsuario(request, response) {
         try {
             const dados = request.body
-            if(!dados.nome || !dados.data_de_nascimento || !dados.cpf || !dados.sexo || !dados.cep || !dados.email || !dados.password_hash) {
-                return response.status(400).json({mensagem: "O nome, a data de nascimento, o cpf, o sexo, o cep, o email e a senha são dados obrigatorios"})
+            if (!dados.nome || !dados.data_de_nascimento || !dados.cpf || !dados.sexo || !dados.cep || !dados.email || !dados.password_hash) {
+                return response.status(400).json({ mensagem: "O nome, a data de nascimento, o cpf, o sexo, o cep, o email e a senha são dados obrigatorios" })
             }
-            if(dados.data_de_nascimento.length != 10){
-                return response.status(400).json({mensagem: "O formato da data enviado é invalido! Use o formato YYYY-MM-DD"})
+            if (dados.data_de_nascimento.length != 10) {
+                return response.status(400).json({ mensagem: "O formato da data enviado é invalido! Use o formato YYYY-MM-DD" })
             }
             const dataDeNascimento = dados.data_de_nascimento.replace(/\s/g, '').split('-')
-            if(dataDeNascimento[0].length != 4 || dataDeNascimento[1].length != 2 || dataDeNascimento[2].length != 2){
-                return response.status(400).json({mensagem: "O formato da data enviado é invalido! Use o formato YYYY-MM-DD"})
+            if (dataDeNascimento[0].length != 4 || dataDeNascimento[1].length != 2 || dataDeNascimento[2].length != 2) {
+                return response.status(400).json({ mensagem: "O formato da data enviado é invalido! Use o formato YYYY-MM-DD" })
             }
-            if(dados.sexo !== "Masculino" && dados.sexo !== "Feminino" && dados.sexo !== "Outro"){
-                return response.status(400).json({mensagem: "Informe um sexo valido !"})
+            if (dados.sexo !== "Masculino" && dados.sexo !== "Feminino" && dados.sexo !== "Outro") {
+                return response.status(400).json({ mensagem: "Informe um sexo valido !" })
             }
-            if(regexEmail.test(dados.email) === false) {
-                return response.status(400).json({mensagem: "O formato do email enviado é invalido! Use um formato valido!"})
+            if (regexEmail.test(dados.email) === false) {
+                return response.status(400).json({ mensagem: "O formato do email enviado é invalido! Use um formato valido!" })
             }
-            if(regexCep.test(dados.cep) === false){
-                return response.status(400).json({mensagem: "O formato do cep enviado é invalido! Use o formato #####-###"})
+            if (regexCep.test(dados.cep) === false) {
+                return response.status(400).json({ mensagem: "O formato do cep enviado é invalido! Use o formato #####-###" })
+            }
+            if (regexCpf.test(dados.cpf) === false) {
+                return response.status(400).json({ mensagem: "O formato do cpf enviado é invalido! Use o formato ###.###.###-##" })
             }
             const cpfExistente = await Usuario.findOne({
                 where: {
-                    cpf : dados.cpf
+                    cpf: dados.cpf
                 }
             })
             const emailExistente = await Usuario.findOne({
@@ -38,16 +42,17 @@ class UsuariosController {
                     email: dados.email
                 }
             })
-            if(cpfExistente || emailExistente){
-                if(cpfExistente.length !== 0 || emailExistente.length !== 0){
-                    return response.status(409).json({mensagem: "CPF ou email invalido"})
+
+            if (cpfExistente || emailExistente) {
+                if (cpfExistente.length !== 0 || emailExistente.length !== 0) {
+                    return response.status(409).json({ mensagem: "CPF ou email invalido" })
                 }
             }
 
             const endereco = await getEnderecoCep(dados.cep)
 
-            if(endereco.erro){
-                return response.status(400).json({mensagem: endereco.erro})
+            if (endereco.erro) {
+                return response.status(400).json({ mensagem: endereco.erro })
             }
 
             const dadosComEndereco = {
@@ -62,30 +67,30 @@ class UsuariosController {
                 createdAt: usuarioCriado.createdAt,
                 updatedAt: usuarioCriado.updatedAt
             })
-            
+
         } catch (error) {
             console.log(error)
-            response.status(500).json({mensagem: "Não foi possivel cadastrar o usuário"})
+            response.status(500).json({ mensagem: "Não foi possivel cadastrar o usuário" })
         }
     }
 
     async fazerLogin(request, response) {
         try {
             const dados = request.body
-            if(!dados.email || !dados.password_hash) {
-                return response.status(400).json({mensagem: "A senha e o email ou o cpf são obrigatorios para fazer o login!"})
+            if (!dados.email || !dados.password_hash) {
+                return response.status(400).json({ mensagem: "A senha e o email ou o cpf são obrigatorios para fazer o login!" })
             }
             const usuario = await Usuario.findOne({
                 where: {
                     email: dados.email
                 }
             })
-            if(!usuario){
-                return response.status(401).json({mensagem: "Email ou senha incorretos"})
+            if (!usuario) {
+                return response.status(401).json({ mensagem: "Email ou senha incorretos" })
             }
             const senhaCorreta = compareSync(dados.password_hash, usuario.password_hash)
-            if(!senhaCorreta){
-                return response.status(401).json({mensagem: "Email ou senha incorretos"})
+            if (!senhaCorreta) {
+                return response.status(401).json({ mensagem: "Email ou senha incorretos" })
             }
             const token = sign({
                 id: usuario.id
@@ -97,7 +102,7 @@ class UsuariosController {
                 nome: usuario.nome
             })
         } catch (error) {
-            response.status(500).json({mensagem: "Não foi possivel realizar o login"})
+            response.status(500).json({ mensagem: "Não foi possivel realizar o login" })
         }
     }
 }

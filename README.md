@@ -48,7 +48,7 @@ npm run start:prod
 
 6. **Usando a API**:
 
-Use o link onde a api foi hospedada, em algum aplicativo tipo o postman, ou pode ser testada com o 'linkgeradodasuaapi/docs' através do swagger, e ainda tem como você testar ela pode ser consumida em algum site que você desenvolver !
+Use o link onde a api foi hospedada, em algum aplicativo tipo o postman, ou pode ser testada com o 'linkgeradodasuaapi/docs' através do swagger
 
 ## Melhorias Futuras
 

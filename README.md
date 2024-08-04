@@ -31,8 +31,7 @@ Essa migração igual a outra possui um nome bem descritivo, ela apenas cria a t
 
 1. **Clone o repositório**:
 ```bash
-git clone https://github.com/seu-usuario/awesome-project.git
-cd awesome-project
+git clone https://github.com/Victor3294/M2-Projeto-Avaliativo.git
 ```
 2. **Configure as variáveis de ambiente criando um arquivo .env baseado no .env.example**.
 
@@ -40,19 +39,16 @@ cd awesome-project
 
 ```bash
 npm install
-Inicie o banco de dados (Docker necessário):
 ```
 
 4. **Execute as migrações do banco de dados**:
 
 ```bash
 npx sequelize-cli db:migrate
-Inicie o servidor:
 ```
 5. **Inicie a api**:
 
 ```bash
-Copiar código
 npm run start:prod
 ```
 

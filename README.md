@@ -17,6 +17,16 @@
 
 ![Diagrama de Arquitetura](src/images/image.png)
 
+### Migrações Utilizadas
+
+As migrações são os arquivos do sequelize responsaveis pela criação e alteração das estruturas das suas tabelas do projeto, as migrações usadas nesse projeto foram duas:
+
+1. **Cria-Tabela-Usuarios**:
+Essa migração tem o nome bem descritivo, ela apenas cria a tabela de usuarios que possui as colunas que mostra no diagrama.
+
+2. **Cria-Tabela-Locais-de-Coleta**:
+Essa migração igual a outra possui um nome bem descritivo, ela apenas cria a tabela dos locais de coleta, essa tabela que possui as colunas mostradas no diagrama.
+
 ## Como Executar
 
 1. **Clone o repositório**:

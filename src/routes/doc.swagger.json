@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "API PETs",
-    "description": "Documentação da API PETs usando express e sequelize",
+    "title": "API Recicla365",
+    "description": "Documentação da API Recicla365 usando express e sequelize",
     "version": "1.0.0"
   },
   "host": "localhost:3000",
@@ -18,7 +18,399 @@
       "description": "Insira o token JWT"
     }
   },
-  "paths": {},
+  "paths": {
+    "/usuarios/": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "Endpoint para criar um usuario",
+        "parameters": [
+          {
+            "name": "CriarUsuario",
+            "in": "body",
+            "description": "Dados do Usuario",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type": "string",
+                  "example": "Usuario Teste"
+                },
+                "data_de_nascimento": {
+                  "type": "string",
+                  "example": "2000-02-20"
+                },
+                "cpf": {
+                  "type": "string",
+                  "example": "111-111-111.11"
+                },
+                "sexo": {
+                  "type": "string",
+                  "example": "Masculino / Feminino / Outro"
+                },
+                "cep": {
+                  "type": "string",
+                  "example": "44444-444"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "email@email.com"
+                },
+                "password_hash": {
+                  "type": "string",
+                  "example": "senha"
+                }
+              },
+              "required": [
+                "nome",
+                "data_de_nascimento",
+                "cpf",
+                "sexo",
+                "cep",
+                "email",
+                "password_hash"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/usuarios/login": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "Endpoint para logar um usuario",
+        "parameters": [
+          {
+            "name": "logarUsuario",
+            "in": "body",
+            "description": "Dados do Usuario",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "email@email.com"
+                },
+                "password_hash": {
+                  "type": "string",
+                  "example": "senha"
+                }
+              },
+              "required": [
+                "email",
+                "password_hash"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/local/": {
+      "post": {
+        "tags": [
+          "Locais de Coleta"
+        ],
+        "description": "Endpoint para criar um local de coleta; onde apenas usuários logados tem o acesso",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "CriarLocalDeColeta",
+            "in": "body",
+            "description": "Dados do local de coleta",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome_do_local": {
+                  "type": "string",
+                  "example": "Local de coleta X"
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "Descrição de um local de coleta especifico"
+                },
+                "cep": {
+                  "type": "string",
+                  "example": "44444-444"
+                }
+              },
+              "required": [
+                "nome_do_local",
+                "descricao",
+                "cep"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Locais de Coleta"
+        ],
+        "description": "Endpoint para listar todos os locais de coleta; onde apenas os usuarios logados tem o acesso",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/local/{id}": {
+      "get": {
+        "tags": [
+          "Locais de Coleta"
+        ],
+        "description": "Endpoint para listar um local de coleta especifico através de seu id; onde apenas o usuario logado tem acesso, e ele só pode ver informações dos locais que foram cadastrados por si próprio",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Locais de Coleta"
+        ],
+        "description": "Endpoint para deletar um local de coleta especifico através de seu id; onde apenas o usuario logado tem acesso, e ele só pode deletar os locais que foram cadastrados por si próprio",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Locais de Coleta"
+        ],
+        "description": "Endpoint para atualizar um local de coleta especifico através de seu id; onde apenas o usuario logado tem acesso, e ele só pode atualizar os locais que foram cadastrados por si próprio",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "AtualizarUmLocalDeColeta",
+            "in": "body",
+            "description": "Novos dados do local de coleta a ser atualizado",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome_do_local": {
+                  "type": "string",
+                  "example": "Local de coleta Y"
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "Descrição de um local de coleta especifico"
+                },
+                "cep": {
+                  "type": "string",
+                  "example": "44444-445"
+                }
+              },
+              "required": [
+                "nome_do_local",
+                "descricao",
+                "cep"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/local/{id}/maps": {
+      "get": {
+        "tags": [
+          "Locais de Coleta"
+        ],
+        "description": "Endpoint para gerar o link do google maps do local que é referenciado pelo id que a rota recebe; onde apenas o usuario logado tem acesso, e ele só pode gerar o link dos locais que foram cadastrados por si próprio",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
   "security": [
     {
       "apiKeyAuth": []

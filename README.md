@@ -2,6 +2,8 @@
 
 ## Descrição do Problema
 
+**Obsevarção: O swagger não está completamente funcional. Caso de algum problema durante seu uso, recomendo testar a api no postman**
+
 **Recicla365** é uma aplicação desenvolvida para solucionar a dificuldade de encontrar locais de coleta de materias reciclaveis, ele resolve esse problema através dessa API, que pode cadastrar usuarios em um banco de dados, esse usuarios se fizerem uma autenticação(login), podem cadastrar locais de coleta no mesmo banco de dados, podem acessar os locais que eles cadastraram, atualizar esses locais, deletar eles, e ainda gerar um link do google maps que leva para esse local ! E com essa base de dados de locais de coleta da api será desenvolvido um site onde pode se encontrar facilmente locais de coleta de materiais reciclaveis perto de você !
 
 ## Técnicas e Tecnologias Utilizadas
